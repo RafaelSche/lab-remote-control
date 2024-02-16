@@ -1,0 +1,12 @@
+phases:
+  start: 5
+  stop: 90
+  step: 5
+input_voltage:
+  start: 25
+  stop: 35.5
+  step: 0.5
+output_voltage:
+  start: 8
+  stop: 12.5
+  step: 0.5

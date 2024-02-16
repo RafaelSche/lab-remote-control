@@ -1,0 +1,6 @@
+testbench:
+  path: configs/testbench/battery_dab_testbench.yml
+  type: BatteryDABTestBench
+test_program:
+  path: configs/test_program/battery_dab_test_program.yml
+  type: BatteryDABTestProgram

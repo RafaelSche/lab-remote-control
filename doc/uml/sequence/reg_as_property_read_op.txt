@@ -1,0 +1,24 @@
+@startuml
+
+control LoadInterface
+control Register
+control Command
+control ESRRegister
+control pyvisa.Resource
+
+entity Load
+
+LoadInterface -> LoadInterface : configure(...)
+LoadInterface -> LoadInterface : self.<Register>
+LoadInterface -> Register : _init_()
+Register -> Command : _call_(self.client)
+Command -> pyvisa.Resource : query('<scpi_register_query_command>?')
+pyvisa.Resource -> Load : Request <Register>
+Load --> pyvisa.Resource : '<int>'
+pyvisa.Resource --> Command : '<int>'
+Command --> Register : <int>
+Register --> LoadInterface : <Register>
+LoadInterface --> LoadInterface : <Register>
+LoadInterface --> LoadInterface : <status>
+
+@enduml

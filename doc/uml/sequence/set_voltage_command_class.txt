@@ -1,0 +1,28 @@
+@startuml
+
+collections TestProgramm
+control Load
+control Command
+control EventStatusRegister
+control pyvisa.Resource
+
+entity LoadDevice
+
+TestProgramm -> Load : load.voltage = 5
+Load -> Command : _~_call_~_(client)
+Command -> pyvisa.Resource : write('VOLTAGE 5')
+pyvisa.Resource -> LoadDevice : request set voltage to 5
+    loop while opc != 1
+    Command -> EventStatusRegister : from_client(client)
+    EventStatusRegister -> Command : _~_call_~_(client)
+    Command -> pyvisa.Resource : query(*ESR?')
+    pyvisa.Resource -> LoadDevice : request EventStatusRegister
+    LoadDevice --> pyvisa.Resource : EventStatusRegister
+    pyvisa.Resource --> Command : '<int>'
+    Command --> EventStatusRegister : '<int>'
+    EventStatusRegister --> Command : opc=1, exe=0, qye=0, cme=0, dde=0, pon=x
+    end
+Command --> Load
+Load --> TestProgramm
+
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+
+collections TestProgramm
+control LoadInterface
+control STBRegister
+control ESRRegister
+control pyvisa.Resource
+
+entity Load
+
+TestProgramm -> LoadInterface : load.voltage = 5
+LoadInterface -> pyvisa.Resource : write('VOLTAGE 5')
+pyvisa.Resource -> Load : set Voltage to 5V
+pyvisa.Resource --> LoadInterface : <Integer>
+LoadInterface -> STBRegister : update()
+STBRegister -> pyvisa.Resource : query('*STB)')
+pyvisa.Resource -> Load : request STB-Register
+Load --> pyvisa.Resource : STB-Register
+pyvisa.Resource --> STBRegister : '96'
+STBRegister --> LoadInterface : sec_ques=0, err=0, ques=0, esr=1, mss=1, oper=0
+LoadInterface -> ESRRegister : update()
+ESRRegister -> pyvisa.Resource : query(*ESR?')
+pyvisa.Resource -> Load : request ESR-Register
+Load --> pyvisa.Resource : ESR-Register
+pyvisa.Resource --> ESRRegister : '1'
+ESRRegister --> LoadInterface : opc=1, exe=0, qye=0, cme=0, dde=0, pon=x
+LoadInterface --> TestProgramm
+
+@enduml

@@ -1,0 +1,22 @@
+input_supply:
+  voltage:
+    protection: 70
+    limit_low: 0
+    limit_high: 65
+  current:
+    protection: 10
+    limit_low: 0
+    limit_high: 8
+
+output_supply:
+  voltage:
+    protection: 30
+    limit_low: 0
+    limit_high: 25
+  current:
+    protection: 10
+    limit_low: 0
+    limit_high: 13.60
+
+power_analyzer:
+  script_from_file: scripts/power_analyzer/pa_ratio

@@ -1,0 +1,30 @@
+@startuml
+
+control LoadInterface
+control Register
+control Command
+control ESRRegister
+control pyvisa.Resource
+
+entity Load
+
+
+LoadInterface -> LoadInterface : configure(...)
+LoadInterface -> LoadInterface : self.<Register> = Register(..., client=self.client)
+LoadInterface -> Register : _init_(a=b, c=d, ...)
+Register -> Command : _call_(self.client)
+Command -> pyvisa.Resource : write('<scpi_register_set_command>')
+    loop while opc != 1
+        Command -> ESRRegister : update()
+        ESRRegister -> pyvisa.Resource : query(*ESR?')
+        pyvisa.Resource -> Load : request ESR-Register
+        Load --> pyvisa.Resource : ESR-Register
+        pyvisa.Resource --> ESRRegister : '1'
+        ESRRegister --> Command : opc=1, exe=0, qye=0, cme=0, dde=0, pon=x
+    end
+Command --> Register : <status>
+Register --> LoadInterface : <Register>
+LoadInterface --> LoadInterface : <status>
+LoadInterface --> LoadInterface : <status>
+
+@enduml

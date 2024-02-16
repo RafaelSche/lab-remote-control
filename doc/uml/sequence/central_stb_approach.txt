@@ -1,0 +1,24 @@
+@startuml
+
+collections TestProgramm
+control LoadInterface
+control STBRegister
+control OtherRegisters
+control pyvisa.Resource
+
+entity Load
+
+LoadInterface -> STBRegister : update()
+STBRegister -> pyvisa.Resource : query('*STB')
+pyvisa.Resource -> Load : request STB
+Load --> pyvisa.Resource : STB
+pyvisa.Resource --> STBRegister : '<int>'
+STBRegister --> STBRegister : sec_ques=x, err=x, ques=x, esr=x, mss=x, oper=x
+STBRegister -> OtherRegisters : update()
+OtherRegisters -> pyvisa.Resource : query('*STB')
+pyvisa.Resource -> Load : request OtherRegisters
+Load --> pyvisa.Resource : OtherRegisters
+pyvisa.Resource --> OtherRegisters : '<int>'
+OtherRegisters --> OtherRegisters : a=b, c=d, ...
+
+@enduml

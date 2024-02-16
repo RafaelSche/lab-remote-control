@@ -1,0 +1,34 @@
+@startuml
+
+class LoadInterface {
+    client: pyvisa.Resource
+}
+
+class Register {
+    client: pyvisa.Resource
+    modifieable: bool
+}
+
+class ESRRegister{
+    operation_complete: bool
+    query_error: bool
+    device_depend_error: bool
+    execute_error: bool
+    command_error: bool
+    power_on: bool
+}
+
+class Command {
+    scpi_command: str
+
+    __call__(client: pyvisa.Resource, *args) -> str
+    operation_complete(client: pyvisa.Resource) -> bool
+}
+
+Register --o  Command
+LoadInterface --o Command
+ESRRegister --|> Register
+Command --o ESRRegister
+LoadInterface --o Register
+
+@enduml

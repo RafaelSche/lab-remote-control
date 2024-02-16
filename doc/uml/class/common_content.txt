@@ -1,0 +1,56 @@
+@startuml
+
+abstract class Intrument {
+    client: pyvisa.Resource
+}
+
+abstract class Register {
+    client: pyvisa.Resource
+    modifieable: bool
+
+    set_by_bit_string(bit_string: str) -> None
+    set_by_int(int_: int, register_length: int = 8) -> None
+}
+
+class ESRRegister{
+    operation_complete: bool
+    query_error: bool
+    device_depend_error: bool
+    execute_error: bool
+    command_error: bool
+    power_on: bool
+
+    EventStatusRegisterError: type
+    QueryError: type
+    DeviceDependError: type
+    ExecutionError: type
+    CommandErrors: type
+
+    set_by_bit_string(bit_string: str) -> None
+    properties_to_int() -> int
+
+    set_command() -> None
+    query_command() -> str
+    set_enable_register_command() -> None
+    raise_active_exceptions() -> None
+}
+
+class Command {
+    scpi_command: str
+    raise_exceptions: Optional[bool] = True
+    check_operation_complete_bit: Optional[bool] = True
+    await_esr_sleep_time: Optional[float] = 0.005
+    await_operation_complete_bit_timeout: Optional[float] = 1.0
+    ignore_timeout: Optional[bool] = True
+
+    __call__(client: pyvisa.Resource, delay=None *args) -> str
+    check_operation_complete(esr: EventStatusRegister, **kwargs) -> bool
+}
+
+Register --o  Command
+Intrument --o Command
+ESRRegister --|> Register
+Command --o ESRRegister
+Intrument --o Register
+
+@enduml

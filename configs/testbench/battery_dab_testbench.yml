@@ -1,0 +1,11 @@
+input_supply:
+  resource: ASRL/dev/ttyACM2::INSTR
+output_supply:
+  resource: ASRL/dev/ttyACM1::INSTR
+load:
+  resource: ASRL/dev/ttyACM0::INSTR
+power_analyzer:
+  resource: TCPIP::192.168.178.20::5025::SOCKET
+test_object:
+  port: /dev/ttyUSB0
+properties: configs/testbench/battery_dab_testbench_properties.yaml

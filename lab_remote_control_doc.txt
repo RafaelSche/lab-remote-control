@@ -1,0 +1,575 @@
+
+
+lab_remote_control.common
+class Command(object):
+    Command(scpi_command: str, *, raise_exceptions: Optional[bool] = True, check_operation_complete_bit: Optional[bool] = True, await_esr_sleep_time: Optional[float] = 0.005, await_operation_complete_bit_timeout: Optional[float] = 1.0, ignore_timeout: Optional[bool] = True)
+    
+    def check_operation_complete((self, *, esr: lab_remote_control.common.EventStatusRegister, **kwargs)):
+class EventStatusRegister(lab_remote_control.common.Register):
+    EventStatusRegister(operation_complete: Optional[bool] = None, query_error: Optional[bool] = None, device_depend_error: Optional[bool] = None, execution_error: Optional[bool] = None, command_errors: Optional[bool] = None, power_on: Optional[bool] = None)
+    
+    class CommandErrors(lab_remote_control.common.EventStatusRegister.EventStatusRegisterError):
+        Common base class for all non-exit exceptions.
+    class DeviceDependError(lab_remote_control.common.EventStatusRegister.EventStatusRegisterError):
+        Common base class for all non-exit exceptions.
+    class EventStatusRegisterError(Exception):
+        Common base class for all non-exit exceptions.
+    class ExecutionError(lab_remote_control.common.EventStatusRegister.EventStatusRegisterError):
+        Common base class for all non-exit exceptions.
+    class QueryError(lab_remote_control.common.EventStatusRegister.EventStatusRegisterError):
+        Common base class for all non-exit exceptions.
+    def properties_to_int((self) -> int):
+    
+    def raise_active_exceptions((self, error_msg)):
+    
+    def set_by_bit_string((self, bit_string)):
+class Instrument(abc.ABC):
+    Helper class that provides a standard way to create an ABC using
+    inheritance.
+    
+    property error_queue
+    
+    property event_status_register
+class Register(abc.ABC):
+    Helper class that provides a standard way to create an ABC using
+    inheritance.
+    
+    def from_client(cls, client:
+    
+    def set_by_bit_string((self, bit_string)):
+    
+    def set_by_int((self, int_, register_length=8)):
+
+lab_remote_control.dab
+class DualActiveBridge(lab_remote_control.common.Instrument):
+    Helper class that provides a standard way to create an ABC using
+    inheritance.
+    
+    def send_clear_FIFO_buffer((self)):
+    Wait at least 600 ms before sending another message to microcontroller.
+    :return:
+    def send_packet((self, value)):
+    
+    def set_phase((self, value: int)):
+class PhaseOutOfRangeError(Exception):
+    Common base class for all non-exit exceptions.
+
+
+lab_remote_control.dataformats
+class NR2(float):
+    Convert a string or number to a floating point number, if possible.
+    
+    def cast_unit((value)):
+    Parses a value and its unit (if any) from a string
+    of the form '<number><unit>'.
+    For example: 10s returns 10.0, 's'
+    
+    :param value: str of the form '<number><unit>'
+    :return: tuple of the form: (<number>, '<unit>')
+class NR3(lab_remote_control.dataformats.NR2):
+    Convert a string or number to a floating point number, if possible.
+    
+    def apply_multiplier((self)):
+
+lab_remote_control.power_analyzer
+class PowerAnalyzer(lab_remote_control.common.Instrument):
+    Helper class that provides a standard way to create an ABC using
+    inheritance.
+    
+    class PowerAnalyzerEventStatusRegister(lab_remote_control.common.EventStatusRegister):
+        PowerAnalyzerEventStatusRegister(operation_complete: Optional[bool] = None, query_error: Optional[bool] = None, device_depend_error: Optional[bool] = None, execution_error: Optional[bool] = None, command_errors: Optional[bool] = None, power_on: Optional[bool] = None, request_control: Optional[bool] = None, user_request: Optional[bool] = None)
+    def clear((self)):
+    
+    def go_to_local((self)):
+    
+    def pull_script_vars((self, include_cycle_timestamp=False) -> dict[str, typing.Union[float, datetime.datetime]]):
+    
+    def reset((self)):
+    
+    def with_visa_resource_str(cls, resource:
+    
+    property cycle_mode
+    
+    property cycle_time
+    
+    property operation_complete
+    
+    property script
+    
+    property zlang
+class PowerAnalyzerCommand(lab_remote_control.common.Command):
+    PowerAnalyzerCommand(scpi_command: str, check_operation_complete_bit=False, *args, **kwargs)
+    
+    def check_operation_complete((self, *, client: pyvisa.resources.resource.Resource, **kwargs)):
+class PowerAnalyzerEventStatusRegister(lab_remote_control.common.EventStatusRegister):
+    PowerAnalyzerEventStatusRegister(operation_complete: Optional[bool] = None, query_error: Optional[bool] = None, device_depend_error: Optional[bool] = None, execution_error: Optional[bool] = None, command_errors: Optional[bool] = None, power_on: Optional[bool] = None, request_control: Optional[bool] = None, user_request: Optional[bool] = None)
+    
+    def properties_to_int((self) -> int):
+    
+    def set_by_bit_string((self, bit_string)):
+class Script(object):
+    Script(source_code: str)
+    
+    class VariablesStorageFullError(Exception):
+        Common base class for all non-exit exceptions.
+    def from_file(cls, path):
+
+lab_remote_control.supply_load
+class BasePropertyClass(object):
+
+
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property alarm_count
+    
+    property limit_high
+    
+    property limit_low
+    
+    property measurement
+    
+    property nominal
+    
+    property over_detection
+    
+    property over_detection_action
+    
+    property protection
+    
+    property setting
+    
+    property under_detection
+    
+    property under_detection_action
+class Load(lab_remote_control.supply_load.SupplyLoad):
+    Helper class that provides a standard way to create an ABC using
+    inheritance.
+    
+    def setup_standard_settings((self)):
+    
+    property input
+    
+    property input_after_remote
+    
+    property input_restore
+class OperationStatusRegister(lab_remote_control.common.Register):
+    OperationStatusRegister(rem_sb: Optional[bool] = None, semi_f47: Optional[bool] = None, derating: Optional[bool] = None, connection_timeout: Optional[bool] = None, constant_voltage: Optional[bool] = None, constant_current: Optional[bool] = None, constant_power: Optional[bool] = None, constant_resistance: Optional[bool] = None, sink: Optional[bool] = None)
+    
+    def properties_to_int((self) -> int):
+    
+    def set_by_bit_string((self, bit_string)):
+    
+    def set_by_int((self, int_)):
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property alarm_count
+    
+    property limit_high
+    
+    property measurement
+    
+    property nominal
+    
+    property protection
+    
+    property setting
+class QuestionableStatusRegister(lab_remote_control.common.Register):
+    QuestionableStatusRegister(over_voltage_protection: Optional[bool] = None, over_current_protection: Optional[bool] = None, over_power_protection: Optional[bool] = None, over_temperature: Optional[bool] = None, over_voltage_detection: Optional[bool] = None, under_voltage_detection: Optional[bool] = None, over_current_detection: Optional[bool] = None, under_current_detection: Optional[bool] = None, over_power_detection: Optional[bool] = None, local: Optional[bool] = None, remote: Optional[bool] = None, output_input: Optional[bool] = None, function: Optional[bool] = None, power_fail: Optional[bool] = None, msp: Optional[bool] = None)
+    
+    def properties_to_int((self) -> int):
+    
+    def set_by_bit_string((self, bit_string)):
+    
+    def set_by_int((self, int_)):
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property limit_high
+    
+    property nominal_max
+    
+    property nominal_min
+    
+    property setting
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property alarm_count
+    
+    property limit_high
+    
+    property limit_low
+    
+    property measurement
+    
+    property nominal
+    
+    property over_detection
+    
+    property over_detection_action
+    
+    property protection
+    
+    property setting
+    
+    property under_detection
+    
+    property under_detection_action
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property alarm_count
+    
+    property limit_high
+    
+    property measurement
+    
+    property nominal
+    
+    property protection
+    
+    property setting
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property limit_high
+    
+    property nominal_max
+    
+    property nominal_min
+    
+    property setting
+class StatusByteRegister(lab_remote_control.common.Register):
+    StatusByteRegister(SecondQuestionableStatusRegister: Optional[bool] = None, ErrorQueue: Optional[bool] = None, QuestionableStatusRegister: Optional[bool] = None, EventStatusRegister: Optional[bool] = None, MasterSummaryStatus: Optional[bool] = None, OperationStatusRegister: Optional[bool] = None)
+    
+    def properties_to_int((self) -> int):
+    
+    def set_by_bit_string((self, bit_string)):
+class Supply(lab_remote_control.supply_load.SupplyLoad):
+    Helper class that provides a standard way to create an ABC using
+    inheritance.
+    
+    def setup_standard_settings((self)):
+    
+    property output
+    
+    property output_after_remote
+    
+    property output_restore
+class SupplyLoad(lab_remote_control.common.Instrument):
+    Helper class that provides a standard way to create an ABC using
+    inheritance.
+    
+    class EventStatusRegister(lab_remote_control.common.Register):
+        EventStatusRegister(operation_complete: Optional[bool] = None, query_error: Optional[bool] = None, device_depend_error: Optional[bool] = None, execution_error: Optional[bool] = None, command_errors: Optional[bool] = None, power_on: Optional[bool] = None)
+    def enable_event_status_register((self)):
+    
+    def setup_standard_settings((self)):
+    
+    def with_visa_resource_str(cls, resource:
+    
+    property after_over_temperature
+    
+    property after_power_fail
+    
+    property after_remote
+    
+    property ampere_hours
+    
+    property current
+    
+    property device_class
+    
+    property master_slave_mode
+    
+    property monitoring_action
+    
+    property monitoring_timeout
+    
+    property off_time
+    
+    property on_time
+    
+    property operation_status_register
+    
+    property operation_time
+    
+    property over_temperature_alarm_count
+    
+    property power
+    
+    property power_fail_alarm_count
+    
+    property questionable_status_register
+    
+    property remote
+    
+    property resistance
+    
+    property resistance_mode
+    
+    property status_byte_register
+    
+    property user_text
+    
+    property voltage
+    
+    property watt_hours
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property alarm_count
+    
+    property control_speed
+    
+    property limit_high
+    
+    property limit_low
+    
+    property measurement
+    
+    property nominal
+    
+    property over_detection
+    
+    property over_detection_action
+    
+    property protection
+    
+    property setting
+    
+    property under_detection
+    
+    property under_detection_action
+
+lab_remote_control.supply_load
+class BasePropertyClass(object):
+
+
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property alarm_count
+    
+    property limit_high
+    
+    property limit_low
+    
+    property measurement
+    
+    property nominal
+    
+    property over_detection
+    
+    property over_detection_action
+    
+    property protection
+    
+    property setting
+    
+    property under_detection
+    
+    property under_detection_action
+class Load(lab_remote_control.supply_load.SupplyLoad):
+    Helper class that provides a standard way to create an ABC using
+    inheritance.
+    
+    def setup_standard_settings((self)):
+    
+    property input
+    
+    property input_after_remote
+    
+    property input_restore
+class OperationStatusRegister(lab_remote_control.common.Register):
+    OperationStatusRegister(rem_sb: Optional[bool] = None, semi_f47: Optional[bool] = None, derating: Optional[bool] = None, connection_timeout: Optional[bool] = None, constant_voltage: Optional[bool] = None, constant_current: Optional[bool] = None, constant_power: Optional[bool] = None, constant_resistance: Optional[bool] = None, sink: Optional[bool] = None)
+    
+    def properties_to_int((self) -> int):
+    
+    def set_by_bit_string((self, bit_string)):
+    
+    def set_by_int((self, int_)):
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property alarm_count
+    
+    property limit_high
+    
+    property measurement
+    
+    property nominal
+    
+    property protection
+    
+    property setting
+class QuestionableStatusRegister(lab_remote_control.common.Register):
+    QuestionableStatusRegister(over_voltage_protection: Optional[bool] = None, over_current_protection: Optional[bool] = None, over_power_protection: Optional[bool] = None, over_temperature: Optional[bool] = None, over_voltage_detection: Optional[bool] = None, under_voltage_detection: Optional[bool] = None, over_current_detection: Optional[bool] = None, under_current_detection: Optional[bool] = None, over_power_detection: Optional[bool] = None, local: Optional[bool] = None, remote: Optional[bool] = None, output_input: Optional[bool] = None, function: Optional[bool] = None, power_fail: Optional[bool] = None, msp: Optional[bool] = None)
+    
+    def properties_to_int((self) -> int):
+    
+    def set_by_bit_string((self, bit_string)):
+    
+    def set_by_int((self, int_)):
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property limit_high
+    
+    property nominal_max
+    
+    property nominal_min
+    
+    property setting
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property alarm_count
+    
+    property limit_high
+    
+    property limit_low
+    
+    property measurement
+    
+    property nominal
+    
+    property over_detection
+    
+    property over_detection_action
+    
+    property protection
+    
+    property setting
+    
+    property under_detection
+    
+    property under_detection_action
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property alarm_count
+    
+    property limit_high
+    
+    property measurement
+    
+    property nominal
+    
+    property protection
+    
+    property setting
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property limit_high
+    
+    property nominal_max
+    
+    property nominal_min
+    
+    property setting
+class StatusByteRegister(lab_remote_control.common.Register):
+    StatusByteRegister(SecondQuestionableStatusRegister: Optional[bool] = None, ErrorQueue: Optional[bool] = None, QuestionableStatusRegister: Optional[bool] = None, EventStatusRegister: Optional[bool] = None, MasterSummaryStatus: Optional[bool] = None, OperationStatusRegister: Optional[bool] = None)
+    
+    def properties_to_int((self) -> int):
+    
+    def set_by_bit_string((self, bit_string)):
+class Supply(lab_remote_control.supply_load.SupplyLoad):
+    Helper class that provides a standard way to create an ABC using
+    inheritance.
+    
+    def setup_standard_settings((self)):
+    
+    property output
+    
+    property output_after_remote
+    
+    property output_restore
+class SupplyLoad(lab_remote_control.common.Instrument):
+    Helper class that provides a standard way to create an ABC using
+    inheritance.
+    
+    class EventStatusRegister(lab_remote_control.common.Register):
+        EventStatusRegister(operation_complete: Optional[bool] = None, query_error: Optional[bool] = None, device_depend_error: Optional[bool] = None, execution_error: Optional[bool] = None, command_errors: Optional[bool] = None, power_on: Optional[bool] = None)
+    def enable_event_status_register((self)):
+    
+    def setup_standard_settings((self)):
+    
+    def with_visa_resource_str(cls, resource:
+    
+    property after_over_temperature
+    
+    property after_power_fail
+    
+    property after_remote
+    
+    property ampere_hours
+    
+    property current
+    
+    property device_class
+    
+    property master_slave_mode
+    
+    property monitoring_action
+    
+    property monitoring_timeout
+    
+    property off_time
+    
+    property on_time
+    
+    property operation_status_register
+    
+    property operation_time
+    
+    property over_temperature_alarm_count
+    
+    property power
+    
+    property power_fail_alarm_count
+    
+    property questionable_status_register
+    
+    property remote
+    
+    property resistance
+    
+    property resistance_mode
+    
+    property status_byte_register
+    
+    property user_text
+    
+    property voltage
+    
+    property watt_hours
+class PropertyClass(lab_remote_control.supply_load.BasePropertyClass):
+
+    
+    property alarm_count
+    
+    property control_speed
+    
+    property limit_high
+    
+    property limit_low
+    
+    property measurement
+    
+    property nominal
+    
+    property over_detection
+    
+    property over_detection_action
+    
+    property protection
+    
+    property setting
+    
+    property under_detection
+    
+    property under_detection_action

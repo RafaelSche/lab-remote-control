@@ -1,0 +1,7 @@
+U_in = UTRMS1?
+I_in = ITRMS1?
+P_in = U_in * I_in
+U_out = UTRMS2?
+I_out = ITRMS2?
+P_out = U_out * I_out
+n = P_out / P_in
